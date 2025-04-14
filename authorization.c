@@ -4,11 +4,11 @@
 #include <unistd.h>
 
 char password[9] = "Admin476";
-int userRole;
 char inputPassword[9];
+int userRole;
 bool isAdmin;
 
-void userRoleChecker()
+void CheckUserRole()
 {
     printf("Type the right option...\n");
     printf("0 - Customer\n1 - Admin\n");

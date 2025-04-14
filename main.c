@@ -15,16 +15,19 @@ int main()
 
     Authorization();
 
-    if (isAdmin)
+    switch (isAdmin)
     {
+    case true:
         printf("Hello admin!\n\n");
         printProducts();
         AdminLogic();
-    }
-    else
-    {
+        break;
+
+    default:
         printf("----\nWelcome to the Grocery Store!\n----\n\n");
         printProducts();
+        break;
     }
+
     return 0;
 };

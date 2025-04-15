@@ -9,27 +9,36 @@
 #include "authorization.c"
 #include "admin.c"
 
+bool start;
+
 int main()
 {
+    start = true;
     addStrings();
 
-    CheckUserRole();
-
-    Authorization();
-
-    switch (isAdmin)
+    do
     {
-    case true:
-        printf("Hello admin!\n\n");
-        printProducts();
-        AdminLogic();
-        break;
+        if (userRole == -1) {
+            CheckUserRole();
+        }
+    
+        if (!isAdmin) {
+            Authorization();
+        }
+    
+        switch (isAdmin)
+        {
+        case true:
+            AdminLogic();
+            break;
+    
+        default:
+            printf("----\nWelcome to the Grocery Store!\n----\n\n");
+            printProducts();
+            break;
+        }
 
-    default:
-        printf("----\nWelcome to the Grocery Store!\n----\n\n");
-        printProducts();
-        break;
-    }
+    } while (start);
 
     return 0;
 };

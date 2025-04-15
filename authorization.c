@@ -3,19 +3,35 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "utils.h"
+
 char password[9] = "Admin476";
 char inputPassword[9];
-int userRole;
+int userRole = -1;
 bool isAdmin;
 
 void CheckUserRole()
 {
-    printf("Type the right option...\n");
-    printf("0 - Customer\n1 - Admin\n");
-    scanf("%d", &userRole);
-    while (getchar() != '\n')
-        ;
-    system("cls");
+    do
+    {
+        clearTerminal();
+
+        printf("Welcome to the Grocery Store\n");
+        printf("Select your identity...\n");
+        printf("0 - Customer\n1 - Admin\n");
+
+        scanf("%d", &userRole);
+        while (getchar() != '\n');
+
+        clearTerminal();
+
+        if (userRole != 0 && userRole != 1)
+        {
+            printf("Please type the right option.\n");
+            sleep(2);
+            clearTerminal();
+        }
+    } while (userRole != 0 && userRole != 1);
 }
 
 void Authorization()
@@ -49,7 +65,7 @@ void Authorization()
         };
 
         sleep(2);
-        system("cls");
+        clearTerminal();
     }
-    system("cls");
+    clearTerminal();
 }

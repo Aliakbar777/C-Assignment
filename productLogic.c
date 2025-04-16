@@ -30,3 +30,19 @@ int printProducts()
         printf("ID: %d | Available: %d | $%d | %s\n", productId, quantity[productId], price[productId], name[productId]);
     }
 }
+
+int basket(){
+    int list[10][2];
+
+    for(int i = 0; i < 10; i++){
+        scanf("Type the ID of product: %d", list[i]);
+        while (getchar() != '\n');
+        scanf("Type the quantity of product: %d", list[i][1]);
+        while (getchar() != '\n');
+        // for(int j = 0; j < 2; j++){
+        //     scanf("Type the quantity of product: %d", list[i][j]);
+        // }
+        printf("%d", list);
+    }
+
+}

@@ -25,7 +25,6 @@ int main()
         Authorization();
     
         if (!isAdmin) {
-            printf("----\nWelcome to the Grocery Store!\n----\n\n");
             Basket();
         } else if (isAdmin) {
             AdminLogic();

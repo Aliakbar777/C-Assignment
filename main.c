@@ -26,7 +26,7 @@ int main()
     
         if (!isAdmin) {
             Basket();
-        } else if (isAdmin) {
+        } else if (isAdmin == 1) {
             AdminLogic();
         }
 

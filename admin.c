@@ -14,15 +14,17 @@ void AdminLogic()
         printf("Hello admin!\n\n");
         printProducts();
 
-        printf("\nEnter the ID of the product that you want to restock - ");
+        printf("\nEnter the details of the product that you want to restock...\n");
+
+        printf("ID: ");
         scanf("%d", &ID);
         while (getchar() != '\n');
 
-        printf("\nEnter the quantity of the product - ");
+        printf("Quantity: ");
         scanf("%d", &amount);
         while (getchar() != '\n');
-        
-        printf("\nEnter F to finish restocking, otherwise press enter - ");
+
+        printf("\nEnter F to finish restocking, otherwise to continue press enter - ");
         scanf("%c", &finish);
         while (getchar() != '\n');
 

@@ -44,15 +44,17 @@ void Basket(){
         printf("----\nWelcome to the Grocery Store!\n----\n\n");
         printProducts();
 
-        printf("\nEnter the ID of the product that you want to buy - ");
+        printf("\nEnter the details of the product that you want to buy... ");
+
+        printf("\nID: ");
         scanf("%d", &ID);
         while (getchar() != '\n');
 
-        printf("\nEnter the quantity - ");
+        printf("Quantity: ");
         scanf("%d", &amount);
         while (getchar() != '\n');
 
-        printf("\nEnter F to proceed to the checkout or press enter to buy more - ");
+        printf("\nEnter F to proceed to the checkout or press enter to buy more products - ");
         scanf("%c", &finish);
         while (getchar() != '\n');
 

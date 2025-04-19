@@ -50,11 +50,23 @@ void Basket(){
         scanf("%d", &ID);
         while (getchar() != '\n');
 
+        if (!(ID >= 0 && ID <= 9)) {
+            printf("\n**Incorrect ID number");
+            sleep(2);
+            break;
+        }
+
         printf("Quantity: ");
         scanf("%d", &amount);
         while (getchar() != '\n');
 
-        printf("\nEnter F to proceed to the checkout or press enter to buy more products - ");
+        if (!(amount > 0 && amount <= 100)) {
+            printf("\n**Invalid amount");
+            sleep(2);
+            break;
+        }
+
+        printf("\nEnter F to proceed to the checkout, otherwise press enter to buy more products - ");
         scanf("%c", &finish);
         while (getchar() != '\n');
 

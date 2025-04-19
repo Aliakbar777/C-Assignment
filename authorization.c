@@ -22,12 +22,13 @@ void CheckUserRole()
 
         scanf("%d", &userRole);
         while (getchar() != '\n');
-
+        
         clearTerminal();
 
-        if (userRole == -1)
+        if (!(userRole == 0 && userRole == 1))
         {
             printf("Please type the right option.\n");
+            userRole = -1;
             sleep(2);
             clearTerminal();
         }

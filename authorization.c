@@ -62,8 +62,8 @@ void Authorization()
         }
         else
         {
-            isAdmin = 0;
-            printf("The password is incorrect!\n\n");
+            isAdmin = -1;
+            printf("\n**The password is incorrect!\n\n");
         };
 
         sleep(2);

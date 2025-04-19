@@ -47,10 +47,10 @@ void Basket(){
         printf("\nEnter the details of the product that you want to buy... ");
 
         printf("\nID: ");
-        scanf("%d", &ID);
+        int isValid = scanf("%d", &ID);
         while (getchar() != '\n');
 
-        if (!(ID >= 0 && ID <= 9)) {
+        if (isValid != 1 || !(ID >= 0 && ID <= 9)) {
             printf("\n**Incorrect ID number");
             sleep(2);
             break;

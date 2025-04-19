@@ -24,6 +24,7 @@ void AdminLogic()
         while (getchar() != '\n');
 
         if (finish == 'F') {
+            userRole = -1;
             break;
         }
     }

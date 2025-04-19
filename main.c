@@ -5,8 +5,8 @@
 #include <unistd.h>
 
 #include "utils.h"
-#include "productLogic.c"
 #include "authorization.c"
+#include "productLogic.c"
 #include "admin.c"
 
 bool start;
@@ -21,22 +21,28 @@ int main()
         if (userRole == -1) {
             CheckUserRole();
         }
+
+        Authorization();
     
         if (!isAdmin) {
-            Authorization();
-        }
-    
-        switch (isAdmin)
-        {
-        case true:
-            AdminLogic();
-            break;
-    
-        default:
             printf("----\nWelcome to the Grocery Store!\n----\n\n");
-            printProducts();
-            break;
+            Basket();
+        } else if (isAdmin) {
+            AdminLogic();
         }
+    
+        // switch (isAdmin)
+        // {
+        // case true:
+        //     AdminLogic();
+        //     break;
+    
+        // default:
+        //     printf("----\nWelcome to the Grocery Store!\n----\n\n");
+        //     basket(userRole);
+        //     start = false;
+        //     break;
+        // }
 
     } while (start);
 

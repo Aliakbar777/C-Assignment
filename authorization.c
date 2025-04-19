@@ -25,13 +25,13 @@ void CheckUserRole()
 
         clearTerminal();
 
-        if (userRole != 0 && userRole != 1)
+        if (userRole == -1)
         {
             printf("Please type the right option.\n");
             sleep(2);
             clearTerminal();
         }
-    } while (userRole != 0 && userRole != 1);
+    } while (userRole == -1);
 }
 
 void Authorization()

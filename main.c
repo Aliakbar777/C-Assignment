@@ -30,19 +30,6 @@ int main()
         } else if (isAdmin) {
             AdminLogic();
         }
-    
-        // switch (isAdmin)
-        // {
-        // case true:
-        //     AdminLogic();
-        //     break;
-    
-        // default:
-        //     printf("----\nWelcome to the Grocery Store!\n----\n\n");
-        //     basket(userRole);
-        //     start = false;
-        //     break;
-        // }
 
     } while (start);
 

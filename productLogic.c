@@ -7,6 +7,8 @@ char name[10][9];
 int price[] = {2, 2, 1, 3, 4, 3, 7, 6, 4, 5};
 int quantity[] = {20, 30, 30, 30, 20, 20, 15, 30, 20, 40};
 
+int choices[10] = {0};
+
 void addStrings()
 {
     strcpy(name[0], "Carrot");
@@ -32,11 +34,41 @@ int printProducts()
     }
 }
 
+void showBasket() {
 
-void Basket(){
-    int list[10][2];
-    int ID;
-    int amount;
+    clearTerminal();
+    bool allZero = 0;
+    int overall = 0;
+
+    int input;
+
+    printf("Your products:\n");
+    for (int i = 0; i < 10; i++) {
+        if (choices[i]) {
+            int cost = choices[i] * price[i];
+
+            allZero = true;
+            overall += cost;
+            printf("$%d | quantity: %d | %s\n", cost, choices[i], name[i]);
+        }
+    }
+
+    if (!allZero) {
+        clearTerminal();
+        printf("The basket is empty");
+        return;
+    }
+
+    printf("\nOverall: $%d", overall);
+
+    scanf("%d", &input);
+
+    
+    sleep(20);
+}
+
+void handleUserChoice(){
+    int ID, amount;
     char finish;
 
     while (1) {
@@ -60,20 +92,22 @@ void Basket(){
         scanf("%d", &amount);
         while (getchar() != '\n');
 
-        if (!(amount > 0 && amount <= 100)) {
+        if (!(amount >= 0 && amount <= 100)) {
             printf("\n**Invalid amount");
             sleep(2);
             break;
         }
 
+        choices[ID] += amount;
+
         printf("\nEnter F to proceed to the checkout, otherwise press enter to buy more products - ");
         scanf("%c", &finish);
         while (getchar() != '\n');
 
-        if (finish == 'F') {
-            userRole = -1; // Если что здесь не должно быть этой логики. Это чтобы проверить работает ли этот condiiton.
-            sleep(1);
+        if (finish == 'F' || finish == 'f') {
+            showBasket();
             break;
         }
     }
+    sleep(2);
 }

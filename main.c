@@ -25,7 +25,7 @@ int main()
         Authorization();
     
         if (userRole == 0) {
-            Basket();
+            handleUserChoice();
         } else if (isAdmin == 1) {
             AdminLogic();
         }

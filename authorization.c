@@ -19,6 +19,7 @@ void CheckUserRole()
         printf("Welcome to the Grocery Store\n\n");
         printf("Select your identity...\n");
         printf("0 - Customer\n1 - Admin\n");
+        printf("\nChoice: ");
 
         scanf("%d", &userRole);
         while (getchar() != '\n');

@@ -25,7 +25,7 @@ int main()
         Authorization();
     
         if (userRole == 0) {
-            handleUserChoice();
+            handleUserChoice(start);
         } else if (isAdmin == 1) {
             AdminLogic();
         }

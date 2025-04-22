@@ -8,6 +8,7 @@ int price[] = {2, 2, 1, 3, 4, 3, 7, 6, 4, 5};
 int quantity[] = {20, 30, 30, 30, 20, 20, 15, 30, 20, 40};
 
 int choices[10] = {0};
+int overall = 0;
 
 void addStrings()
 {
@@ -34,11 +35,45 @@ int printProducts()
     }
 }
 
-void showBasket() {
+void Purchase(bool start) {
+    int input;
+    clearTerminal();
+    
+    printf("You have bought!\n");
+    for (int i = 0; i < 10; i++) {
+        if (choices[i]) {
+            int cost = choices[i] * price[i];
+            
+            printf("$%d | quantity: %d | %s\n", cost, choices[i], name[i]);
+            
+            quantity[i] = quantity[i] - choices[i];
+            choices[i] = 0;
+        }
+    }
+    printf("\nOverall: $%d", overall);
+    
+    printf("\n\n-----\n");
+    printf("Thank you for your purchase!\n");
+    printf("See you soon!\n");
+    printf("-----\n");
+
+    printf("\n0 - exit");
+    printf("\n1 - go to the store");
+    printf("\nChoice: ");
+    scanf("%d", &input);
+
+    if (input == 0) {
+        clearTerminal();
+        exit(0);
+    } else {
+        return;
+    }
+}
+
+void showBasket(bool start) {
 
     clearTerminal();
     bool allZero = 0;
-    int overall = 0;
 
     int input;
 
@@ -59,15 +94,29 @@ void showBasket() {
         return;
     }
 
-    printf("\nOverall: $%d", overall);
+    printf("\nOverall: $%d\n", overall);
 
+    printf("\n0 - Buy \n");
+    printf("1 - Continue shopping\n");
+
+    printf("\nChoice: ");
     scanf("%d", &input);
 
+    if (!(input == 0 || input == 1)) {
+        printf("**Invalid choice");
+    }
+
+    if (input == 0) {
+        Purchase(start);
+        return;
+    } else {
+        return;
+    }
     
-    sleep(20);
+    // sleep(20);
 }
 
-void handleUserChoice(){
+void handleUserChoice(bool start){
     int ID, amount;
     char finish;
 
@@ -105,7 +154,7 @@ void handleUserChoice(){
         while (getchar() != '\n');
 
         if (finish == 'F' || finish == 'f') {
-            showBasket();
+            showBasket(start);
             break;
         }
     }

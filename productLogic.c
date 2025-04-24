@@ -10,6 +10,9 @@ int quantity[] = {20, 30, 30, 30, 20, 20, 15, 30, 20, 40};
 int choices[10] = {0};
 int overall = 0;
 
+int userChoice = 0;
+int isBasket = 0;
+
 void addStrings()
 {
     strcpy(name[0], "Carrot");
@@ -35,7 +38,7 @@ int printProducts()
     }
 }
 
-void Purchase(bool start) {
+void Purchase() {
     int input;
     clearTerminal();
     
@@ -50,6 +53,10 @@ void Purchase(bool start) {
             choices[i] = 0;
         }
     }
+
+    userChoice = 0;
+    isBasket = 0;
+
     printf("\nOverall: $%d", overall);
     
     printf("\n\n-----\n");
@@ -61,102 +68,131 @@ void Purchase(bool start) {
     printf("\n1 - go to the store");
     printf("\nChoice: ");
     scanf("%d", &input);
+    while (getchar() != '\n');
+
+    if (!(input == 0 || input == 1)) {
+        printf("**Invalid choice");
+        sleep(2);
+        return;
+    }
 
     if (input == 0) {
         clearTerminal();
         exit(0);
-    } else {
+    } else if (input == 1) {
         return;
     }
 }
 
-void showBasket(bool start) {
-
-    clearTerminal();
-    bool allZero = 0;
-
+void showBasket() {
     int input;
+    bool allZero = 0;
+    
+    clearTerminal();
 
-    printf("Your products:\n");
-    for (int i = 0; i < 10; i++) {
-        if (choices[i]) {
-            int cost = choices[i] * price[i];
-
-            allZero = true;
-            overall += cost;
-            printf("$%d | quantity: %d | %s\n", cost, choices[i], name[i]);
+    if (!isBasket) {
+        
+        printf("Your products:\n");
+        for (int i = 0; i < 10; i++) {
+            if (choices[i]) {
+                int cost = choices[i] * price[i];
+                
+                allZero = true;
+                overall += cost;
+                printf("$%d | quantity: %d | %s\n", cost, choices[i], name[i]);
+            }
+        }
+        
+        if (!allZero) {
+            clearTerminal();
+            printf("The basket is empty");
+            return;
+        }
+        
+    
+        printf("\nOverall: $%d\n", overall);
+        
+        printf("\n0 - Buy \n");
+        printf("1 - Continue shopping\n");
+        
+        printf("\nChoice: ");
+        scanf("%d", &input);
+        while (getchar() != '\n');
+        
+        if (!(input == 0 || input == 1)) {
+            printf("**Invalid choice");
+            sleep(2);
+            return;
         }
     }
-
-    if (!allZero) {
-        clearTerminal();
-        printf("The basket is empty");
-        return;
-    }
-
-    printf("\nOverall: $%d\n", overall);
-
-    printf("\n0 - Buy \n");
-    printf("1 - Continue shopping\n");
-
-    printf("\nChoice: ");
-    scanf("%d", &input);
-
-    if (!(input == 0 || input == 1)) {
-        printf("**Invalid choice");
-    }
-
-    if (input == 0) {
-        Purchase(start);
-        return;
-    } else {
-        return;
-    }
     
-    // sleep(20);
+    
+    if (input == 0) {
+        isBasket = 1;
+        Purchase();
+        return;
+    } else if (input == 1) {
+        userChoice = 0;
+        return;
+    }
+
+
 }
 
-void handleUserChoice(bool start){
+void handleUserChoice(){
     int ID, amount;
-    char finish;
+    int finish;
+    
+    if (!userChoice) {
 
-    while (1) {
         clearTerminal();
         printf("----\nWelcome to the Grocery Store!\n----\n\n");
         printProducts();
-
+    
         printf("\nEnter the details of the product that you want to buy... ");
-
+    
         printf("\nID: ");
         int isValid = scanf("%d", &ID);
         while (getchar() != '\n');
-
+    
         if (isValid != 1 || !(ID >= 0 && ID <= 9)) {
-            printf("\n**Incorrect ID number");
+            printf("\n**Incorrect ID number.");
             sleep(2);
-            break;
+            return;
         }
-
+    
         printf("Quantity: ");
         scanf("%d", &amount);
         while (getchar() != '\n');
-
+    
+        bool isAvailable = (quantity[ID] - amount) >= 0;
+    
         if (!(amount >= 0 && amount <= 100)) {
-            printf("\n**Invalid amount");
+            printf("\n**Invalid amount.");
             sleep(2);
-            break;
+            return;
+        } else if (!isAvailable) {
+            printf("**Sorry, only %d items are available.", quantity[ID]);
+            sleep(2);
+            return;
         }
-
+    
         choices[ID] += amount;
-
-        printf("\nEnter F to proceed to the checkout, otherwise press enter to buy more products - ");
-        scanf("%c", &finish);
+    
+        printf("\n0 - to proceed to the checkout.");
+        printf("\n1 - to buy more products.\n");
+        printf("\nChoice: ");
+        scanf("\n%d", &finish);
         while (getchar() != '\n');
 
-        if (finish == 'F' || finish == 'f') {
-            showBasket(start);
-            break;
-        }
     }
-    sleep(2);
+
+
+    if (finish == 0) {
+        userChoice = 1;
+        showBasket();
+        return;
+    } else if (finish == 1) {
+        return;
+    }
 }

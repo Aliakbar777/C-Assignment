@@ -37,19 +37,22 @@ void printProducts()
     }
 }
 
-void Purchase(int overall) {
+void Purchase() {
     int input;
+    int overall;
+
     clearTerminal();
     
     printf("You have bought!\n");
     for (int i = 0; i < 10; i++) {
         if (choices[i]) {
             int cost = choices[i] * price[i];
-            
+
+            overall += cost;
             printf("$%d | quantity: %d | %s\n", cost, choices[i], name[i]);
             
             quantity[i] = quantity[i] - choices[i];
-            choices[i] = 0;
+            // choices[i] = 0;
         }
     }
     
@@ -64,10 +67,11 @@ void Purchase(int overall) {
     printf("\n0 - exit");
     printf("\n1 - go to the store");
     printf("\nChoice: ");
-    scanf("%d", &input);
+    int isChoiceValid = scanf("%d", &input);
     while (getchar() != '\n');
     
-    if (!(input == 0 || input == 1)) {
+    if (!isChoiceValid ||!(input == 0 || input == 1)) {
+        overall = 0;
         printf("\n**Invalid choice");
         sleep(2);
         return;
@@ -77,9 +81,15 @@ void Purchase(int overall) {
         clearTerminal();
         exit(0);
     } else if (input == 1) {
+        memset(choices, 0, sizeof(choices));
         isBasket = 0;
         userChoice = 0;
+        overall = 0;
         return;
+    } else {
+        // printf("\n**Invalid choice");
+        // sleep(2);
+        // return;
     }
 }
 
@@ -131,7 +141,7 @@ void showBasket() {
     
     if (input == 0) {
         isBasket = 1;
-        Purchase(overall);
+        Purchase();
         return;
     } else if (input == 1) {
         userChoice = 0;

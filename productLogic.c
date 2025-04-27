@@ -52,7 +52,6 @@ void Purchase() {
             printf("$%d | quantity: %d | %s\n", cost, choices[i], name[i]);
             
             quantity[i] = quantity[i] - choices[i];
-            // choices[i] = 0;
         }
     }
     
@@ -86,10 +85,6 @@ void Purchase() {
         userChoice = 0;
         overall = 0;
         return;
-    } else {
-        // printf("\n**Invalid choice");
-        // sleep(2);
-        // return;
     }
 }
 
@@ -131,11 +126,6 @@ void showBasket() {
         scanf("%d", &input);
         while (getchar() != '\n');
         
-        // if (!(input == 0 || input == 1)) {
-        //     printf("**Invalid choice");
-        //     sleep(2);
-        //     return;
-        // }
     }
     
     

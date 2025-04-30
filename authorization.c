@@ -10,6 +10,8 @@ char inputPassword[9];
 int userRole = -1;
 int isAdmin = -1;
 
+extern void clearTerminal();
+
 void CheckUserRole()
 {
     do

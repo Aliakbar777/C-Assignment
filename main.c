@@ -10,18 +10,13 @@
 #include "components/admin/admin.h"
 #include "components/customer/customer.h"
 
-bool start;
-
 int main()
 {
-    start = true;
-
-    do
-    {
+    while (1) {
         if (userRole == -1) {
             CheckUserRole();
         }
-
+    
         Authorization();
     
         if (userRole == 0) {
@@ -29,8 +24,7 @@ int main()
         } else if (isAdmin == 1) {
             AdminLogic();
         }
-
-    } while (start);
+    }
 
     return 0;
 };

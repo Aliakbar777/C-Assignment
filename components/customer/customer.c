@@ -3,39 +3,16 @@
 #include <string.h>
 #include <unistd.h>
 
-char name[10][9];
-int price[] = {2, 2, 1, 3, 4, 3, 7, 6, 4, 5};
-int quantity[] = {20, 30, 30, 30, 20, 20, 15, 30, 20, 40};
+#include "../products/productLogic.h"
+#include "customer.h"
+#include "../../utilities/utils.h"
 
-int choices[10] = {0};
+#define PRODUCT_COUNT 10
+#define NAME_LEN 9
 
+int userChoices[10] = {0};
 int userChoice = 0;
 int isBasket = 0;
-
-void addStrings()
-{
-    strcpy(name[0], "Carrot");
-    strcpy(name[1], "Apple");
-    strcpy(name[2], "Potato");
-    strcpy(name[3], "Cucumber");
-    strcpy(name[4], "Flour");
-    strcpy(name[5], "Bread");
-    strcpy(name[6], "Beef");
-    strcpy(name[7], "Sausage");
-    strcpy(name[8], "Rice");
-    strcpy(name[9], "Ketchup");
-};
-
-void printProducts()
-{
-    int productId;
-    
-    printf("Groceries:\n");
-    for (productId = 0; productId < 10; productId++)
-    {
-        printf("ID: %d | Available: %d | $%d | %s\n", productId, quantity[productId], price[productId], name[productId]);
-    }
-}
 
 void Purchase() {
     int input;
@@ -45,13 +22,13 @@ void Purchase() {
     
     printf("You have bought!\n");
     for (int i = 0; i < 10; i++) {
-        if (choices[i]) {
-            int cost = choices[i] * price[i];
+        if (userChoices[i]) {
+            int cost = userChoices[i] * price[i];
 
             overall += cost;
-            printf("$%d | quantity: %d | %s\n", cost, choices[i], name[i]);
+            printf("$%d | quantity: %d | %s\n", cost, userChoices[i], name[i]);
             
-            quantity[i] = quantity[i] - choices[i];
+            quantity[i] = quantity[i] - userChoices[i];
         }
     }
     
@@ -75,16 +52,18 @@ void Purchase() {
         sleep(2);
         return;
     }
-    
-    if (input == 0) {
+
+    switch (input)
+    {
+    case 0:
         clearTerminal();
         exit(0);
-    } else if (input == 1) {
-        memset(choices, 0, sizeof(choices));
+    case 1:
+        memset(userChoices, 0, sizeof(userChoices));
         isBasket = 0;
         userChoice = 0;
         overall = 0;
-        return;
+        break;
     }
 }
 
@@ -99,12 +78,12 @@ void showBasket() {
         
         printf("Your products:\n");
         for (int i = 0; i < 10; i++) {
-            if (choices[i]) {
-                int cost = choices[i] * price[i];
+            if (userChoices[i]) {
+                int cost = userChoices[i] * price[i];
                 
                 hasProducts = true;
                 overall += cost;
-                printf("$%d | quantity: %d | %s\n", cost, choices[i], name[i]);
+                printf("$%d | quantity: %d | %s\n", cost, userChoices[i], name[i]);
             }
         }
         
@@ -128,18 +107,21 @@ void showBasket() {
         
     }
     
-    
-    if (input == 0) {
+    switch (input)
+    {
+    case 0:
         isBasket = 1;
         Purchase();
-        return;
-    } else if (input == 1) {
+        break;
+
+    case 1:
         userChoice = 0;
-        return;
-    } else {
-        printf("**Invalid choice");
+        break;
+    
+    default:
+        printf("\n**Invalid choice");
         sleep(2);
-        return;
+        break;
     }
 
 }
@@ -160,8 +142,14 @@ void handleUserChoice(){
         printf("\nID: ");
         int isIDValid = scanf("%d", &ID);
         while (getchar() != '\n');
+
+        if (checkInput(ID, isIDValid, 0, 9) == -1) {
+            printf("\n**Incorrect ID number.");
+            sleep(2);
+            return;
+        }
     
-        if (isIDValid != 1 || !(ID >= 0 && ID <= 9)) {
+        if (isIDValid != 1 || !(0 <= ID <= 9)) {
             printf("\n**Incorrect ID number.");
             sleep(2);
             return;
@@ -171,15 +159,15 @@ void handleUserChoice(){
         int isQuantityValid = scanf("%d", &amount);
         while (getchar() != '\n');
     
-        choices[ID] += amount;
-        bool isAvailable = (quantity[ID] - choices[ID]) >= 0;
+        userChoices[ID] += amount;
+        bool isAvailable = (quantity[ID] - userChoices[ID]) >= 0;
     
         if (isQuantityValid != 1 || !(amount >= 0 && amount <= 100)) {
             printf("\n**Invalid amount.");
             sleep(2);
             return;
         } else if (!isAvailable) {
-            choices[ID] -= amount;
+            userChoices[ID] -= amount;
             printf("**Sorry, only %d items are available.", quantity[ID]);
             sleep(2);
             return;
@@ -193,20 +181,26 @@ void handleUserChoice(){
         while (getchar() != '\n');
 
         if (!isChoiceValid || !(finish == 1 || finish == 0)) {
-            choices[ID] -= amount;
+            userChoices[ID] -= amount;
             printf("\n**Invalid choice.");
             sleep(2);
             return;
         }
 
     }
-
-
-    if (finish == 0) {
+    switch (finish)
+    {
+    case 0:
         userChoice = 1;
         showBasket();
-        return;
-    } else if (finish == 1) {
-        return;
+        break;
+    case 1:
+        break;
+    default:
+        userChoices[ID] -= amount;
+        printf("\n**Invalid choice.");
+        sleep(2);
+        break;
     }
+
 }

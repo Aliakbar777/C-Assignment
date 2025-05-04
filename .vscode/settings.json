@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "productlogic.h": "c",
+        "customer.h": "c"
+    }
+}

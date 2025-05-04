@@ -4,17 +4,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "utils.h"
-#include "authorization.c"
-#include "productLogic.c"
-#include "admin.c"
+#include "utilities/utils.h"
+#include "components/auth/authorization.h"
+#include "components/products/productLogic.h"
+#include "components/admin/admin.h"
+#include "components/customer/customer.h"
 
 bool start;
 
 int main()
 {
     start = true;
-    addStrings();
 
     do
     {

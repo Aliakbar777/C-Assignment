@@ -3,31 +3,27 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "utils.h"
+#include "../../utilities/utils.h"
+#include "../auth/authorization.h"
 
-char password[9] = "Admin476";
-char inputPassword[9];
 int userRole = -1;
 int isAdmin = -1;
 
-extern void clearTerminal();
-
-void CheckUserRole()
-{
+void CheckUserRole(){
     do
     {
         clearTerminal();
-
+        
         printf("Welcome to the Grocery Store\n\n");
         printf("Select your identity...\n");
         printf("0 - Customer\n1 - Admin\n");
         printf("\nChoice: ");
-
+        
         scanf("%d", &userRole);
         while (getchar() != '\n');
-
+        
         clearTerminal();
-
+        
         if (!(userRole == 0 || userRole == 1))
         {
             userRole = -1;
@@ -38,8 +34,10 @@ void CheckUserRole()
     } while (userRole == -1);
 }
 
-void Authorization()
-{
+void Authorization() {
+    char password[9] = "Admin476";
+    char inputPassword[9];
+
     if (userRole == 0)
     {
         return;

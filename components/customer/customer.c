@@ -163,6 +163,7 @@ void handleUserChoice(){
         bool isAvailable = (quantity[ID] - userChoices[ID]) >= 0;
     
         if (isQuantityValid != 1 || !(amount >= 0 && amount <= 100)) {
+            userChoices[ID] -= amount;
             printf("\n**Invalid amount.");
             sleep(2);
             return;

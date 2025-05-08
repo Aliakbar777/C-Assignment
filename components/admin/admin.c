@@ -53,8 +53,8 @@ void restockConfirmation(int adminChoices[]) {
                     quantity[i] += adminChoices[i];
                 }
             }
-            userRole = -1;
-            adminChoice = 1;
+            userRole = 1;
+            adminChoice = 0;
             printf("\nYou have successfully restocked products.");
             sleep(2);
             break;
@@ -99,6 +99,7 @@ void AdminLogic() {
         adminChoices[ID] += amount;
     
         if (isQuantityValid != 1 || !(amount > 0 && amount <= 100)) {
+            adminChoices[ID] -= amount;
             printf("\n**Invalid amount.");
             sleep(2);
             return;

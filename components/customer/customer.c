@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "../products/productLogic.h"
+#include "../auth/authorization.h"
 #include "customer.h"
 #include "../../utilities/utils.h"
 
@@ -142,14 +143,8 @@ void handleUserChoice(){
         printf("\nID: ");
         int isIDValid = scanf("%d", &ID);
         while (getchar() != '\n');
-
-        if (checkInput(ID, isIDValid, 0, 9) == -1) {
-            printf("\n**Incorrect ID number.");
-            sleep(2);
-            return;
-        }
     
-        if (isIDValid != 1 || !(0 <= ID <= 9)) {
+        if (isIDValid != 1 || !(ID >= 0 && ID <= 9)) {
             printf("\n**Incorrect ID number.");
             sleep(2);
             return;

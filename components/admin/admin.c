@@ -54,6 +54,7 @@ void restockConfirmation(int adminChoices[]) {
                 }
             }
             userRole = -1;
+            adminChoice = 1;
             printf("\nYou have successfully restocked products.");
             sleep(2);
             break;

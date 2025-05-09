@@ -44,15 +44,9 @@ void Purchase() {
     printf("\n0 - exit");
     printf("\n1 - go to the store");
     printf("\nChoice: ");
-    int isChoiceValid = scanf("%d", &input);
-    while (getchar() != '\n');
     
-    if (!isChoiceValid ||!(input == 0 || input == 1)) {
-        overall = 0;
-        printf("\n**Invalid choice");
-        sleep(2);
-        return;
-    }
+    scanf("%d", &input);
+    while (getchar() != '\n');
 
     switch (input)
     {
@@ -65,10 +59,16 @@ void Purchase() {
         userChoice = 0;
         overall = 0;
         break;
+    default:
+        printf("\n**Invalid choice");
+        sleep(2);
+        break;
     }
 }
 
 void showBasket() {
+    #define PRODUCT_COUNT 10
+
     int input;
     bool hasProducts = false;
     int overall = 0;
@@ -78,7 +78,7 @@ void showBasket() {
     if (!isBasket) {
         
         printf("Your products:\n");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < PRODUCT_COUNT; i++) {
             if (userChoices[i]) {
                 int cost = userChoices[i] * price[i];
                 
@@ -128,6 +128,8 @@ void showBasket() {
 }
 
 void handleUserChoice(){
+    #define PRODUCT_COUNT 10
+
     int ID, amount;
     int input;
     
@@ -144,7 +146,7 @@ void handleUserChoice(){
         int isIDValid = scanf("%d", &ID);
         while (getchar() != '\n');
     
-        if (isIDValid != 1 || !(ID >= 0 && ID <= 9)) {
+        if ( !isIDValid || !(ID >= 0 && ID <= PRODUCT_COUNT)) {
             printf("\n**Incorrect ID number.");
             sleep(2);
             return;
@@ -157,7 +159,7 @@ void handleUserChoice(){
         userChoices[ID] += amount;
         bool isAvailable = (quantity[ID] - userChoices[ID]) >= 0;
     
-        if (isQuantityValid != 1 || !(amount >= 0 && amount <= 100)) {
+        if ( !isQuantityValid || !(amount >= 0 && amount <= 100)) {
             userChoices[ID] -= amount;
             printf("\n**Invalid amount.");
             sleep(2);
@@ -175,17 +177,11 @@ void handleUserChoice(){
         printf("2 - to go back to the main menu.\n");
         printf("3 - to exit the store.\n");
         printf("\nChoice: ");
-        int isChoiceValid = scanf("\n%d", &input);
+        
+        scanf("\n%d", &input);
         while (getchar() != '\n');
-
-        if (!isChoiceValid || !(input <= 0 || input >= 3)) {
-            userChoices[ID] -= amount;
-            printf("\n**Invalid choice.");
-            sleep(2);
-            return;
-        }
-
     }
+
     switch (input)
     {
     case 0:

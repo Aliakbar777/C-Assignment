@@ -110,15 +110,9 @@ void AdminLogic() {
         printf("2 - to go back to the main menu.\n");
         printf("3 - to exit the store.\n");
         printf("\nChoice: ");
-        int isChoiceValid = scanf("\n%d", &input);
-        while (getchar() != '\n');
 
-        if (!isChoiceValid || !(input <= 0 || input >= 3)) {
-            adminChoices[ID] -= amount;
-            printf("\n**Invalid choice.");
-            sleep(2);
-            return;
-        }
+        scanf("\n%d", &input);
+        while (getchar() != '\n');
 
         switch (input)
         {
@@ -135,6 +129,11 @@ void AdminLogic() {
         case 3:
             clearTerminal();
             exit(0);
+        default:
+            adminChoices[ID] -= amount;
+            printf("\n**Invalid choice");
+            sleep(2);
+            break;
         }
     }
 }

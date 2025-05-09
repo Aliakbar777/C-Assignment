@@ -2,9 +2,9 @@
 #define AUTHORIZATION_H
 
 extern int userRole;
-extern int isAdmin;
+extern int userIsAdmin;
 
-void CheckUserRole();
+void checkUserRole();
 void Authorization();
 
 #endif

@@ -129,7 +129,7 @@ void showBasket() {
 
 void handleUserChoice(){
     int ID, amount;
-    int finish;
+    int input;
     
     if (!userChoice) {
 
@@ -172,11 +172,13 @@ void handleUserChoice(){
     
         printf("\n0 - to proceed to the checkout.");
         printf("\n1 - to buy more products.\n");
+        printf("2 - to go back to the main menu.\n");
+        printf("3 - to exit the store.\n");
         printf("\nChoice: ");
-        int isChoiceValid = scanf("\n%d", &finish);
+        int isChoiceValid = scanf("\n%d", &input);
         while (getchar() != '\n');
 
-        if (!isChoiceValid || !(finish == 1 || finish == 0)) {
+        if (!isChoiceValid || !(input <= 0 || input >= 3)) {
             userChoices[ID] -= amount;
             printf("\n**Invalid choice.");
             sleep(2);
@@ -184,7 +186,7 @@ void handleUserChoice(){
         }
 
     }
-    switch (finish)
+    switch (input)
     {
     case 0:
         userChoice = 1;
@@ -192,6 +194,13 @@ void handleUserChoice(){
         break;
     case 1:
         break;
+    case 2:
+        userChoices[ID] -= amount;
+        userRole = -1;
+        break;
+    case 3:
+        clearTerminal();
+        exit(0);
     default:
         userChoices[ID] -= amount;
         printf("\n**Invalid choice.");

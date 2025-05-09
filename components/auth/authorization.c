@@ -7,9 +7,9 @@
 #include "../auth/authorization.h"
 
 int userRole = -1;
-int isAdmin = -1;
+int userIsAdmin = -1;
 
-void CheckUserRole(){
+void checkUserRole(){
     do
     {
         clearTerminal();
@@ -38,12 +38,7 @@ void Authorization() {
     char password[9] = "Admin476";
     char inputPassword[9];
 
-    if (userRole == 0)
-    {
-        return;
-    }
-
-    while (isAdmin == -1)
+    while (userIsAdmin == -1)
     {
         printf("Type the admin password\n\n");
         printf("<-- type \"back\" to proceed to the store\n");
@@ -54,7 +49,7 @@ void Authorization() {
 
         if (strcmp(password, inputPassword) == 0)
         {
-            isAdmin = 1;
+            userIsAdmin = 1;
         }
         else if (strcmp(inputPassword, "back") == 0)
         {
@@ -63,11 +58,11 @@ void Authorization() {
         }
         else
         {
-            isAdmin = -1;
+            userIsAdmin = -1;
             printf("\n**The password is incorrect!\n\n");
+            sleep(2);
         };
-
-        sleep(2);
+        
         clearTerminal();
     }
     clearTerminal();

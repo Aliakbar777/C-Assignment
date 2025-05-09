@@ -107,11 +107,13 @@ void AdminLogic() {
     
         printf("\n0 - to proceed to the confirmation.");
         printf("\n1 - to choose more products to restock.\n");
+        printf("2 - to go back to the main menu.\n");
+        printf("3 - to exit the store.\n");
         printf("\nChoice: ");
         int isChoiceValid = scanf("\n%d", &input);
         while (getchar() != '\n');
 
-        if (!isChoiceValid || !(input == 1 || input == 0)) {
+        if (!isChoiceValid || !(input <= 0 || input >= 3)) {
             adminChoices[ID] -= amount;
             printf("\n**Invalid choice.");
             sleep(2);
@@ -126,6 +128,13 @@ void AdminLogic() {
             break;
         case 1:
             break;
+        case 2:
+            adminChoices[ID] -= amount;
+            userRole = -1;
+            break;
+        case 3:
+            clearTerminal();
+            exit(0);
         }
     }
 }

@@ -13,17 +13,34 @@
 int main()
 {
     while (1) {
-        if (userRole == -1) {
-            CheckUserRole();
+
+        
+        if (userRole == -1) { // -1 is equivalent to null
+            checkUserRole();
         }
-    
-        Authorization();
-    
-        if (userRole == 0) {
+
+        switch (userRole)
+        {
+        case 1:
+            Authorization();
+            if (userIsAdmin == 1) {
+                AdminLogic();
+            }
+            break;
+        case 0:
             handleUserChoice();
-        } else if (isAdmin == 1) {
-            AdminLogic();
+            break;
         }
+    
+        // if (userRole == 1) { // userRole = 1 is admin choice.
+        //     Authorization();
+        // }
+    
+        // if (userRole == 0) {
+        //     handleUserChoice();
+        // } else if (userIsAdmin == 1) {
+        //     AdminLogic();
+        // }
     }
 
     return 0;

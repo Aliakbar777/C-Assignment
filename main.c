@@ -31,16 +31,6 @@ int main()
             handleUserChoice();
             break;
         }
-    
-        // if (userRole == 1) { // userRole = 1 is admin choice.
-        //     Authorization();
-        // }
-    
-        // if (userRole == 0) {
-        //     handleUserChoice();
-        // } else if (userIsAdmin == 1) {
-        //     AdminLogic();
-        // }
     }
 
     return 0;

@@ -172,7 +172,7 @@ void handleUserChoice(){
         }
     
     
-        printf("\n0 - to proceed to the checkout.");
+        printf("\n0 - to proceed to the cart.");
         printf("\n1 - to buy more products.\n");
         printf("2 - to go back to the main menu.\n");
         printf("3 - to exit the store.\n");

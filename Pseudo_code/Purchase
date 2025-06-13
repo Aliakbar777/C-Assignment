@@ -1,0 +1,56 @@
+Start
+
+If userType == 0 then
+    Label: CustomerMenu
+
+    Display list of 10 products (ID, Name, Price, Quantity)
+    Display "Enter the ID of the product you want to buy:"
+    Input productID
+
+    Display "Enter the quantity of the product:"
+    Input productQty
+
+    If productID is invalid OR productQty is negative OR productQty > Quantity[productID]
+        Display "Invalid input or insufficient stock"
+        Go to CustomerMenu
+
+    Add productID and productQty to the cart
+    Reduce Quantity[productID] by productQty
+
+    Label: CustomerOptions
+    Display "Choose an option:"
+    Display "0 - Proceed to basket"
+    Display "1 - Buy more products"
+    Display "2 - Return to main menu"
+    Display "3 - Exit store"
+    Input option
+
+    Switch (option)
+        Case 0:
+            Display basket items with ID, Name, Price, Quantity
+            Display "0 - Purchase"
+            Display "1 - Continue shopping"
+            Input purchaseOption
+
+            If purchaseOption == 0 then
+                Display receipt with all purchased items
+                Display "0 - Exit"
+                Display "1 - Go back to store"
+                Input nextStep
+                If nextStep == 0 then
+                    End Program
+                Else
+                    Go to CustomerMenu
+            Else
+                Go to CustomerMenu
+
+        Case 1:
+            Go to CustomerMenu
+
+        Case 2:
+            Go back to main identity selection
+
+        Case 3:
+            End Program
+
+End If

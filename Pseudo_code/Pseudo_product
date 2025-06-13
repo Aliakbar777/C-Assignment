@@ -1,0 +1,25 @@
+// Global Constants
+DEFINE PRODUCT_COUNT = 10
+DEFINE NAME_LEN = 9
+
+// Global Arrays (Product Data)
+// These arrays store information about each product available in the store.
+// They are accessible globally to other components like customer and admin modules.
+DECLARE STRING ARRAY name[PRODUCT_COUNT][NAME_LEN] = {
+    "Carrot", "Apple", "Potato", "Cucumber", "Flour",
+    "Bread", "Beef", "Sausage", "Rice", "Ketchup"
+}
+DECLARE INTEGER ARRAY price[PRODUCT_COUNT] = {2, 2, 1, 3, 4, 3, 7, 6, 4, 5}
+DECLARE INTEGER ARRAY quantity[PRODUCT_COUNT] = {20, 30, 30, 30, 20, 20, 15, 30, 20, 40}
+
+// Function to display the list of available products to the user
+FUNCTION printProducts()
+  DECLARE INTEGER productId // Loop counter for product IDs
+  
+  DISPLAY "Groceries:"
+  // Iterate through each product to display its details
+  FOR productId FROM 0 TO PRODUCT_COUNT - 1
+    // Print Product ID, Available Quantity, Price, and Name
+    DISPLAY "ID: " + productId + " | Available: " + quantity[productId] + " | $" + price[productId] + " | " + name[productId]
+  END FOR
+END FUNCTION

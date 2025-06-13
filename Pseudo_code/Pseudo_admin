@@ -1,0 +1,174 @@
+// Global Variables (Accessible within this module and potentially others if declared extern)
+DECLARE INTEGER ID // Stores the product ID chosen by the admin
+DECLARE INTEGER amount // Stores the quantity entered by the admin
+DECLARE INTEGER adminChoice // Controls flow within admin logic (0 for selection, 1 for confirmation)
+DECLARE INTEGER ARRAY adminChoices[10] = {0} // Stores quantities chosen for restocking by product ID
+
+// External variables (from other modules, assumed to be accessible)
+// DECLARE INTEGER ARRAY price[PRODUCT_COUNT] // from productLogic.h
+// DECLARE STRING ARRAY name[PRODUCT_COUNT][NAME_LEN] // from productLogic.h
+// DECLARE INTEGER ARRAY quantity[PRODUCT_COUNT] // from productLogic.h (main product stock)
+// DECLARE INTEGER userRole // from authorization.h
+
+// External functions (from other modules, assumed to be accessible)
+// CALL clearTerminal() // from utilities/utils.h
+// CALL printProducts() // from products/productLogic.h
+// CALL exit(0) // standard library function for program exit
+
+// Function to confirm the restock order and apply changes to inventory
+FUNCTION restockConfirmation(adminChoices_param[]) // Pseudocode shows param for clarity, C passes by reference
+  DECLARE INTEGER input
+  DECLARE BOOLEAN hasProducts = FALSE // Flag to check if any products were chosen for restock
+  // Note: 'overall' variable in C code for cost calculation is present but unused.
+  // Pseudocode will reflect that it's initialized but not used to display overall cost.
+  DECLARE INTEGER overall = 0 
+  
+  CALL clearTerminal()
+  
+  DISPLAY "Chosen products to restock:"
+  // Iterate through all possible product IDs
+  FOR i FROM 0 TO 9 // Loop for 10 products
+    IF adminChoices_param[i] IS GREATER THAN 0 THEN
+      // Calculate cost (though not used in output in C)
+      DECLARE INTEGER cost = adminChoices_param[i] * price[i] // Assumes 'price' array is accessible
+      
+      SET hasProducts = TRUE
+      SET overall = overall + cost // Accumulate overall cost
+      // Display quantity and name of product chosen for restock
+      DISPLAY "quantity: +" + adminChoices_param[i] + " | " + name[i] // Assumes 'name' array is accessible
+    END IF
+  END FOR
+  
+  // If no products were chosen for restock, display a message and return
+  IF NOT hasProducts THEN
+    CALL clearTerminal()
+    DISPLAY "**You have not yet chosen products to restock"
+    SET adminChoice = 0 // Reset adminChoice to allow selecting products again
+    WAIT 2 SECONDS // Pause for 2 seconds
+    RETURN // Exit function
+  END IF
+  
+  // Display options for confirmation
+  DISPLAY ""
+  DISPLAY "0 - Restock "
+  DISPLAY "1 - Continue restocking"
+  
+  DISPLAY ""
+  DISPLAY "Choice: "
+  READ input // Read user's confirmation choice
+  CONSUME NEWLINE CHARACTER // Clear input buffer
+    
+  // Handle the confirmation choice
+  SWITCH input
+    CASE 0: // User confirms restock
+      // Iterate through chosen products to add quantity to main inventory
+      FOR i FROM 0 TO 9
+        IF adminChoices_param[i] IS GREATER THAN 0 THEN
+          SET quantity[i] = quantity[i] + adminChoices_param[i] // Update 'quantity' array
+        END IF
+      END FOR
+      // Reset user role to 1 (Admin) to stay in admin mode after restock
+      SET userRole = 1 
+      SET adminChoice = 0 // Reset adminChoice to allow new operations
+      DISPLAY ""
+      DISPLAY "You have successfully restocked products."
+      WAIT 2 SECONDS
+      BREAK
+    CASE 1: // User chooses to continue restocking (go back to selection)
+      SET adminChoice = 0 // Reset adminChoice to allow new operations
+      BREAK
+    DEFAULT: // Invalid input
+      DISPLAY "**Invalid choice"
+      WAIT 2 SECONDS
+      BREAK
+  END SWITCH
+END FUNCTION
+
+// Main logic for Administrator operations
+FUNCTION AdminLogic()
+  DECLARE INTEGER input // User's choice after adding items for restock
+  
+  // Only execute product selection if not already in a pending confirmation state
+  IF NOT adminChoice THEN
+    CALL clearTerminal()
+    
+    DISPLAY "Hello admin!"
+    DISPLAY ""
+    // Display current product list
+    CALL printProducts() // Assumes this function prints the product list
+    
+    DISPLAY ""
+    DISPLAY "Enter the details of the product that you want to restock..."
+    
+    // Get Product ID to restock
+    DISPLAY ""
+    DISPLAY "ID: "
+    DECLARE BOOLEAN isIDValid = READ ID // Read ID, capture validity
+    CONSUME NEWLINE CHARACTER
+    
+    // Validate Product ID
+    IF NOT isIDValid OR NOT (ID IS GREATER THAN OR EQUAL TO 0 AND ID IS LESS THAN OR EQUAL TO 9) THEN
+      DISPLAY ""
+      DISPLAY "**Incorrect ID number."
+      WAIT 2 SECONDS
+      RETURN // Exit function if ID is invalid
+    END IF
+    
+    // Get Quantity to restock
+    DISPLAY "Quantity: "
+    DECLARE BOOLEAN isQuantityValid = READ amount // Read amount, capture validity
+    CONSUME NEWLINE CHARACTER
+    
+    // Add chosen amount to adminChoices array for this product
+    SET adminChoices[ID] = adminChoices[ID] + amount
+    
+    // Validate Quantity
+    IF NOT isQuantityValid OR NOT (amount IS GREATER THAN 0 AND amount IS LESS THAN OR EQUAL TO 100) THEN
+      // Revert the amount added to adminChoices if invalid
+      SET adminChoices[ID] = adminChoices[ID] - amount
+      DISPLAY ""
+      DISPLAY "**Invalid amount."
+      WAIT 2 SECONDS
+      RETURN // Exit function if amount is invalid
+    END IF
+    
+    // Display options after choosing a product for restock
+    DISPLAY ""
+    DISPLAY "0 - to proceed to the confirmation."
+    DISPLAY "1 - to choose more products to restock."
+    DISPLAY "2 - to go back to the main menu."
+    DISPLAY "3 - to exit the store."
+    DISPLAY ""
+    DISPLAY "Choice: "
+
+    READ input
+    CONSUME NEWLINE CHARACTER
+  END IF
+
+  // Handle admin's choice
+  SWITCH input
+    CASE 0: // Proceed to restock confirmation
+      SET adminChoice = 1 // Set flag to indicate moving to confirmation
+      CALL restockConfirmation(adminChoices) // Call confirmation function
+      BREAK
+    CASE 1: // Choose more products to restock
+      // adminChoice remains 0, so next loop iteration will show product list again
+      BREAK
+    CASE 2: // Go back to main menu
+      // Revert the last added quantity (assuming this is desired when going back to main menu)
+      // Note: Similar to customer logic, this might be problematic if multiple items were added.
+      SET adminChoices[ID] = adminChoices[ID] - amount 
+      SET userRole = -1 // Reset user role to -1 to force re-selection in main loop
+      BREAK
+    CASE 3: // Exit the store
+      CALL clearTerminal()
+      CALL exit(0) // Exit the program
+    DEFAULT: // Invalid input
+      // Revert the last added quantity for invalid choice as well
+      SET adminChoices[ID] = adminChoices[ID] - amount 
+      DISPLAY ""
+      DISPLAY "**Invalid choice"
+      WAIT 2 SECONDS
+      BREAK
+  END SWITCH
+END FUNCTION

@@ -99,7 +99,7 @@ void showBasket() {
     
         printf("\nOverall: $%d\n", overall);
         
-        printf("\n0 - Buy \n");
+        printf("\n0 - Purchase \n");
         printf("1 - Continue shopping\n");
         
         printf("\nChoice: ");
@@ -172,7 +172,7 @@ void handleUserChoice(){
         }
     
     
-        printf("\n0 - to proceed to the cart.");
+        printf("\n0 - to proceed to the basket.");
         printf("\n1 - to buy more products.\n");
         printf("2 - to go back to the main menu.\n");
         printf("3 - to exit the store.\n");

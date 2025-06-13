@@ -1,0 +1,81 @@
+// Global variables
+DECLARE INTEGER userRole = -1
+DECLARE INTEGER userIsAdmin = -1
+
+// Function to check and set the user's role (Customer or Admin)
+FUNCTION checkUserRole()
+  DO
+    // Clear the terminal screen (assuming a utility function exists)
+    CALL clearTerminal()
+    
+    // Display welcome message and options to the user
+    DISPLAY "Welcome to the Grocery Store"
+    DISPLAY ""
+    DISPLAY "Select your identity..."
+    DISPLAY "0 - Customer"
+    DISPLAY "1 - Admin"
+    DISPLAY ""
+    DISPLAY "Choice: "
+    
+    // Read user's choice
+    READ userRole
+    // Clear the input buffer (to consume the newline character)
+    CONSUME NEWLINE CHARACTER
+    
+    // Clear the terminal screen again
+    CALL clearTerminal()
+    
+    // Validate the user's input
+    IF NOT (userRole IS 0 OR userRole IS 1) THEN
+      // If input is invalid, reset userRole and display an error message
+      SET userRole = -1
+      DISPLAY "Please type the right option."
+      // Pause for 2 seconds (assuming a utility function exists)
+      WAIT 2 SECONDS
+      CALL clearTerminal()
+    END IF
+  WHILE userRole IS -1 // Repeat until a valid role (0 or 1) is entered
+END FUNCTION
+
+// Function to handle Administrator authorization
+FUNCTION Authorization()
+  DECLARE STRING adminPassword = "Admin476"
+  DECLARE STRING inputPassword
+
+  // Loop until the user is confirmed as admin or chooses to go "back"
+  WHILE userIsAdmin IS -1
+    // Display prompt for admin password
+    DISPLAY "Type the admin password"
+    DISPLAY ""
+    DISPLAY "<-- type \"back\" to proceed to the store"
+    DISPLAY "password: "
+
+    // Read password input from the user
+    READ inputPassword // Use fgets logic for reading with spaces, handling newline
+
+    // Compare input password with the correct admin password
+    IF inputPassword IS EQUAL TO adminPassword THEN
+      // If correct, set userIsAdmin to 1 (true)
+      SET userIsAdmin = 1
+    ELSE IF inputPassword IS EQUAL TO "back" THEN
+      // If user types "back", reset userRole to -1 to force role re-selection in main loop
+      SET userRole = -1
+      // Exit the password input loop
+      BREAK
+    ELSE
+      // If incorrect, reset userIsAdmin and display an error message
+      SET userIsAdmin = -1
+      DISPLAY ""
+      DISPLAY "**The password is incorrect!"
+      DISPLAY ""
+      // Pause for 2 seconds
+      WAIT 2 SECONDS
+    END IF
+    
+    // Clear the terminal screen after each attempt or action
+    CALL clearTerminal()
+  END WHILE
+  // Clear the terminal screen one last time after exiting the loop
+  CALL clearTerminal()
+END FUNCTION
+

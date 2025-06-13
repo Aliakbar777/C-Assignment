@@ -1,0 +1,44 @@
+PROGRAM Main
+
+  // Loop indefinitely to keep the application running
+  WHILE TRUE
+    // Check if user role is not yet determined (or equivalent to null/unassigned)
+    IF userRole IS -1 THEN
+      // Call a function to determine or set the user's role
+      CALL checkUserRole()
+    END IF
+
+    // Branch logic based on the determined user's role
+    SWITCH userRole
+      // Case for Administrator role
+      CASE 1:
+        // Perform authorization checks
+        CALL Authorization()
+        // If user is confirmed as admin
+        IF userIsAdmin IS 1 THEN
+          // Execute administrator-specific logic
+          CALL AdminLogic()
+        END IF
+        // Exit the current switch case, continue the main loop
+        BREAK
+      
+      // Case for regular Customer role
+      CASE 0:
+        // Handle customer's choices or actions
+        CALL handleUserChoice()
+        // Exit the current switch case, continue the main loop
+        BREAK
+      
+      // Default or other cases (optional, but good practice for robustness)
+      // DEFAULT:
+      //   // Handle unexpected or unassigned roles, perhaps display an error
+      //   // Or log out the user
+      //   BREAK
+    END SWITCH
+  END WHILE
+
+  // This part of the code is unreachable in an infinite loop,
+  // but included for standard main function structure.
+  RETURN 0
+
+END PROGRAM

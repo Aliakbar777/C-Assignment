@@ -1,0 +1,11 @@
+// Function to clear the terminal screen
+FUNCTION clearTerminal()
+  // Check the operating system environment
+  IF OPERATING_SYSTEM IS "Windows" THEN
+    // Execute the Windows command to clear the screen
+    EXECUTE SYSTEM COMMAND "cls"
+  ELSE
+    // For other operating systems (like Linux/macOS), execute the clear command
+    EXECUTE SYSTEM COMMAND "clear"
+  END IF
+END FUNCTION

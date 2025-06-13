@@ -1,0 +1,254 @@
+// Constants and Global Variables
+DEFINE PRODUCT_COUNT = 10 // Assuming this is defined globally or passed as a parameter in the original context
+DEFINE NAME_LEN = 9 // Assuming this is defined globally or passed as a parameter in the original context
+
+DECLARE INTEGER ARRAY userChoices[PRODUCT_COUNT] = {0} // Stores quantity chosen by user for each product
+DECLARE INTEGER userChoice = 0 // Controls flow within customer logic (0 for selecting, 1 for basket)
+DECLARE INTEGER isBasket = 0 // Flag to check if currently in basket view (1) or not (0)
+
+// External variables (from other modules, assumed to be accessible)
+// DECLARE INTEGER ARRAY price[PRODUCT_COUNT]
+// DECLARE INTEGER ARRAY quantity[PRODUCT_COUNT]
+// DECLARE STRING ARRAY name[PRODUCT_COUNT] (assuming char name[][NAME_LEN])
+// DECLARE INTEGER userRole // from authorization module
+
+// External functions (from other modules, assumed to be accessible)
+// CALL clearTerminal() // from utilities/utils.h
+// CALL printProducts() // from products/productLogic.h
+// CALL exit(0) // standard library function for program exit
+
+// Function to handle the purchase process and display receipt
+FUNCTION Purchase()
+  DECLARE INTEGER input
+  DECLARE INTEGER overall = 0 // Initialize overall total to 0
+
+  CALL clearTerminal()
+  
+  DISPLAY "You have bought!"
+  // Iterate through all products to calculate total cost and update inventory
+  FOR i FROM 0 TO PRODUCT_COUNT - 1
+    IF userChoices[i] IS GREATER THAN 0 THEN
+      // Calculate cost for this product
+      DECLARE INTEGER cost = userChoices[i] * price[i] // Assumes 'price' array is accessible
+
+      // Add to overall total
+      SET overall = overall + cost
+      // Display details of the purchased product
+      DISPLAY "$" + cost + " | quantity: " + userChoices[i] + " | " + name[i] // Assumes 'name' array is accessible
+      
+      // Update the main product quantity (deduct purchased amount)
+      SET quantity[i] = quantity[i] - userChoices[i] // Assumes 'quantity' array is accessible
+    END IF
+  END FOR
+  
+  // Display the total overall cost
+  DISPLAY ""
+  DISPLAY "Overall: $" + overall
+  
+  DISPLAY ""
+  DISPLAY "-----"
+  DISPLAY "Thank you for your purchase!"
+  DISPLAY "See you soon!"
+  DISPLAY "-----"
+  
+  // Provide options after purchase
+  DISPLAY ""
+  DISPLAY "0 - exit"
+  DISPLAY "1 - go to the store"
+  DISPLAY "Choice: "
+  
+  // Read user's choice
+  READ input
+  CONSUME NEWLINE CHARACTER
+
+  // Handle user's choice after purchase
+  SWITCH input
+    CASE 0:
+      CALL clearTerminal()
+      CALL exit(0) // Exit the program
+    CASE 1:
+      // Reset all user choices and basket flags for new shopping session
+      CALL RESET ARRAY userChoices TO ALL ZEROS
+      SET isBasket = 0
+      SET userChoice = 0
+      SET overall = 0 // Reset overall total for next purchase
+      BREAK
+    DEFAULT:
+      DISPLAY ""
+      DISPLAY "**Invalid choice"
+      WAIT 2 SECONDS
+      BREAK
+  END SWITCH
+END FUNCTION
+
+// Function to display the contents of the user's shopping basket
+FUNCTION showBasket()
+  DECLARE INTEGER input
+  DECLARE BOOLEAN hasProducts = FALSE // Flag to check if basket contains any products
+  DECLARE INTEGER overall = 0 // Initialize overall total for basket display
+  
+  CALL clearTerminal()
+  
+  // Only display basket contents if not coming from a purchase
+  IF NOT isBasket THEN
+    DISPLAY "Your products:"
+    // Iterate through user's choices to list products in basket
+    FOR i FROM 0 TO PRODUCT_COUNT - 1
+      IF userChoices[i] IS GREATER THAN 0 THEN
+        DECLARE INTEGER cost = userChoices[i] * price[i]
+        
+        SET hasProducts = TRUE
+        SET overall = overall + cost
+        DISPLAY "$" + cost + " | quantity: " + userChoices[i] + " | " + name[i]
+      END IF
+    END FOR
+    
+    // If no products in the basket, display empty message and return
+    IF NOT hasProducts THEN
+      CALL clearTerminal()
+      DISPLAY "The basket is empty"
+      SET userChoice = 0 // Allow user to go back to product selection
+      WAIT 2 SECONDS
+      RETURN
+    END IF
+    
+    // Display overall total for the basket
+    DISPLAY ""
+    DISPLAY "Overall: $" + overall + ""
+    
+    // Provide options for basket
+    DISPLAY ""
+    DISPLAY "0 - Buy "
+    DISPLAY "1 - Continue shopping"
+    DISPLAY ""
+    DISPLAY "Choice: "
+    READ input
+    CONSUME NEWLINE CHARACTER
+  END IF
+  
+  // Handle user's choice from basket view
+  SWITCH input
+    CASE 0:
+      SET isBasket = 1 // Set flag to indicate proceeding to purchase
+      CALL Purchase() // Call purchase function
+      BREAK
+
+    CASE 1:
+      SET userChoice = 0 // Allow user to continue shopping (go back to product selection)
+      BREAK
+    
+    DEFAULT:
+      DISPLAY ""
+      DISPLAY "**Invalid choice"
+      WAIT 2 SECONDS
+      BREAK
+  END SWITCH
+END FUNCTION
+
+// Function to handle general user choices (product selection, navigating store)
+FUNCTION handleUserChoice()
+  // Constants are defined here, assuming they are local to this function or scope
+  // If they were truly #define in C, they would be replaced by the preprocessor.
+  // We'll treat them as constants here for pseudocode clarity.
+  // DEFINE PRODUCT_COUNT 10 // Already defined globally at the top for pseudocode
+
+  DECLARE INTEGER ID, amount
+  DECLARE INTEGER input // User's choice after adding items
+  
+  // If user is not currently in the process of deciding after adding an item
+  IF NOT userChoice THEN
+    CALL clearTerminal()
+    DISPLAY "----"
+    DISPLAY "Welcome to the Grocery Store!"
+    DISPLAY "----"
+    DISPLAY ""
+
+    // Display available products
+    CALL printProducts() // Assumes this function prints the product list
+    
+    DISPLAY ""
+    DISPLAY "Enter the details of the product that you want to buy... "
+    
+    // Get product ID from user
+    DISPLAY ""
+    DISPLAY "ID: "
+    DECLARE BOOLEAN isIDValid = READ ID // Read ID, capture validity (assuming READ can return status)
+    CONSUME NEWLINE CHARACTER
+    
+    // Validate ID
+    IF NOT isIDValid OR NOT (ID IS GREATER THAN OR EQUAL TO 0 AND ID IS LESS THAN OR EQUAL TO PRODUCT_COUNT -1) THEN // Adjusted ID range to be 0 to PRODUCT_COUNT-1 based on common array indexing
+      DISPLAY ""
+      DISPLAY "**Incorrect ID number."
+      WAIT 2 SECONDS
+      RETURN // Exit function if ID is invalid
+    END IF
+    
+    // Get quantity from user
+    DISPLAY "Quantity: "
+    DECLARE BOOLEAN isQuantityValid = READ amount // Read amount, capture validity
+    CONSUME NEWLINE CHARACTER
+    
+    // Increment user's choice for this product
+    SET userChoices[ID] = userChoices[ID] + amount
+    // Check if enough quantity is available (current stock - user's total requested for this item)
+    DECLARE BOOLEAN isAvailable = (quantity[ID] - userChoices[ID]) IS GREATER THAN OR EQUAL TO 0 // Assumes 'quantity' array is accessible
+    
+    // Validate quantity
+    IF NOT isQuantityValid OR NOT (amount IS GREATER THAN OR EQUAL TO 0 AND amount IS LESS THAN OR EQUAL TO 100) THEN
+      // Revert user's choice if invalid amount
+      SET userChoices[ID] = userChoices[ID] - amount
+      DISPLAY ""
+      DISPLAY "**Invalid amount."
+      WAIT 2 SECONDS
+      RETURN // Exit function if amount is invalid
+    ELSE IF NOT isAvailable THEN
+      // Revert user's choice if not enough stock
+      SET userChoices[ID] = userChoices[ID] - amount
+      DISPLAY "**Sorry, only " + quantity[ID] + " items are available."
+      WAIT 2 SECONDS
+      RETURN // Exit function if not enough stock
+    END IF
+    
+    // Display options after adding product to basket
+    DISPLAY ""
+    DISPLAY "0 - to proceed to the cart."
+    DISPLAY "1 - to buy more products."
+    DISPLAY "2 - to go back to the main menu."
+    DISPLAY "3 - to exit the store."
+    DISPLAY ""
+    DISPLAY "Choice: "
+    
+    READ input
+    CONSUME NEWLINE CHARACTER
+  END IF
+
+  // Handle user's choice
+  SWITCH input
+    CASE 0:
+      SET userChoice = 1 // Set flag to indicate proceeding to basket
+      CALL showBasket() // Call showBasket function
+      BREAK
+    CASE 1:
+      // userChoice remains 0, loop will continue in main to show products again
+      BREAK
+    CASE 2:
+      // Revert the last added quantity (assuming this is desired when going back to main menu)
+      // NOTE: Original C code has userChoices[ID] -= amount; here,
+      // but ID and amount might be out of scope or not correctly representing the *last* added item
+      // if this path is taken after multiple items. Pseudocode retains this logic for fidelity.
+      // A more robust system might clear the entire userChoices or provide a mechanism to remove specific items.
+      SET userChoices[ID] = userChoices[ID] - amount // Potential issue if user adds multiple items then goes back.
+      SET userRole = -1 // Reset user role to -1 to force re-selection in main loop
+      BREAK
+    CASE 3:
+      CALL clearTerminal()
+      CALL exit(0) // Exit the program
+    DEFAULT:
+      // Revert the last added quantity for invalid choice as well
+      SET userChoices[ID] = userChoices[ID] - amount // Same potential issue as case 2
+      DISPLAY ""
+      DISPLAY "**Invalid choice."
+      WAIT 2 SECONDS
+      BREAK
+  END SWITCH
+END FUNCTION

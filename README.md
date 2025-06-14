@@ -1,5 +1,4 @@
 # C-Assignment
-Сан Тропе и Шульти лошары!
 
 To do:
 1) User should have an option to exit before buying.

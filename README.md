@@ -2,7 +2,6 @@
 
 To do:
 1) User should have an option to exit before buying.
-2) Should notify the admin about the low quantity of certain products.
 
 Чтобы запустить код надо скачать gcc compiler: https://youtu.be/Tua7fDwi2L8?si=589jUCYcff1Wnvrs
 После установки открываете терминал в vs code и вводите: gcc main.c utils.c
